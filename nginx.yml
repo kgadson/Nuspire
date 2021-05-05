@@ -1,0 +1,40 @@
+---
+- hosts: all
+  tasks:
+    - name: ensure nginx is at the latest version
+      yum: name=nginx state=latest
+      become: yes
+    - name: start nginx
+      service:
+          name: nginx
+          state: started
+      become: yes
+    - name: create a directory named nuspire file:
+      path: /usr/share/nginx/html/{{item}} state: directory
+       with_items:
+          - 'lambda'
+          - 'mysql'
+          - 'ansible'
+          - 'sqs'
+          - 'terraform'
+      become: yes
+    - name: copy the nginx config file and restart nginx
+      copy:
+        src: /home/ec2-user/static_site.cfg
+        dest: /etc/nginx/sites-available/static_site.cfg
+      become: yes
+    - name: create symlink
+      file:
+        src: /etc/nginx/sites-available/static_site.cfg
+        dest: /etc/nginx/sites-enabled/default.conf
+        state: link
+      become: yes
+    - name: copy the content of the web site
+      copy:
+        src: /home/ec2-user/static-site-src/
+        dest: /home/ec2-user/static-site
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+      become: yes

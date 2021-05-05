@@ -1,0 +1,50 @@
+---
+- hosts: all
+  tasks:
+    - name: create a directory named nuspire 
+      file:
+        path: "{{item}}" 
+        state: directory
+      with_items:
+        - '/home/ec2-user/lambda'
+        - '/home/ec2-user/mysql'
+        - '/home/ec2-user/ansible'
+        - '/home/ec2-user/sqs'
+        - '/home/ec2-user/terraform'
+        - '/home/ec2-user/playbooks'
+      become: yes
+    - name: create a directory named nuspire file
+      file:
+        path: /home/ec2-user/ansible/{{item}} 
+        state: directory
+      with_items:
+        - 'playbooks'
+        - 'terraform'
+      become: yes
+    - name: create a directory named nuspire 
+      file:
+        path: /home/ec2-user/playbooks/{{item}} 
+        state: directory
+      with_items:
+        - 'nginx'
+        - 'mysql'
+      become: yes
+    - name: Provision files nginx
+      command: mv /home/ec2-user/{{item}} /home/ec2-user/ansible/{{item}}
+       with_items:
+          - 'nginx.yml'
+          - 'ansible-logo.jpg'
+          - 'index.html'
+      become: yes
+    - name: create a directory named nuspire 
+      file:
+      path: /home/ec2-user/playbooks/mysql/vars state: directory
+      become: yes
+    - name: Move mysql-install playbook
+      command: mv /home/ec2-user/mysql-install.yml /home/ec2-user/playbooks/mysql/mysql-install.yml
+      become: yes
+    - name: Move vars for mysql
+      command: mv /home/ec2-user/main.yml /home/ec2-user/playbooks/mysql/vars/main.yml
+      become: yes
+
+

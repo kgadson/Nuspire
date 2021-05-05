@@ -1,0 +1,33 @@
+mysql_root_password: "kyle"
+ 
+mysql_databases:
+ 
+  - name: myshop
+ 
+    encoding: latin1
+ 
+    collation: latin1_general_ci
+ 
+  - name: frisby
+ 
+    encoding: latin1
+ 
+    collation: latin1_general_ci
+ 
+mysql_users:
+ 
+  - name: myshop_user
+ 
+    host: "127.0.0.1"
+ 
+    password: gadson
+ 
+    priv: "myshop.*:ALL"
+ 
+  - name: sysbench_user
+ 
+    host: "127.0.0.1"
+ 
+    password: talley
+ 
+    priv: "sysbench.*:ALL"
